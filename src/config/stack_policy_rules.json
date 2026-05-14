@@ -1,0 +1,94 @@
+{
+  "common_extensions": [
+    ".md",
+    ".txt",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".toml",
+    ".ini",
+    ".env",
+    ".sql",
+    ".xml",
+    ".properties",
+    ".sh",
+    ".bat",
+    ".dockerfile"
+  ],
+  "backend_extensions": {
+    "python": [".py"],
+    "java": [".java", ".kt"],
+    "typescript": [".ts", ".js"]
+  },
+  "frontend_extensions": [".ts", ".tsx", ".js", ".jsx", ".vue", ".css", ".scss", ".html"],
+  "language_aliases": {
+    "python": ["python", "py", "fastapi", "flask", "django"],
+    "java": ["java", "spring", "spring boot", "maven", "gradle", "mybatis", "jpa"],
+    "typescript": ["typescript", "ts", "node", "nestjs", "express", "next.js", "nextjs"],
+    "javascript": ["javascript", "js", "react", "vue", "angular"]
+  },
+  "profiles": [
+    {
+      "id": "fullstack_java_vue",
+      "priority": 200,
+      "stack_type": "fullstack",
+      "backend_language": "java",
+      "frontend_language": "javascript",
+      "default_code_extension": ".java",
+      "keywords_all": ["java", "vue"],
+      "keywords_any": ["全栈", "fullstack", "前后端"],
+      "guidance": "全栈项目（Java + Vue 模板）。后端按 Java 分层，前端按 Vue 分层，允许 .xml/.yml/.sql。"
+    },
+    {
+      "id": "java_spring_maven",
+      "priority": 120,
+      "stack_type": "backend",
+      "backend_language": "java",
+      "frontend_language": "javascript",
+      "default_code_extension": ".java",
+      "keywords_all": ["java"],
+      "keywords_any": ["spring", "spring boot", "maven", "gradle", "mybatis", "jpa"],
+      "guidance": "后端项目（Java/Spring/Maven 模板）。请输出 controller/service/entity/repository 分层，并包含 pom.xml 或 build.gradle。"
+    },
+    {
+      "id": "python_fastapi",
+      "priority": 110,
+      "stack_type": "backend",
+      "backend_language": "python",
+      "frontend_language": "javascript",
+      "default_code_extension": ".py",
+      "keywords_any": ["python", "fastapi", "flask", "django", "pytest"],
+      "guidance": "后端项目（Python/FastAPI 模板）。请输出 routers/services/models/repositories 分层，并包含 requirements 或 pyproject 配置。"
+    },
+    {
+      "id": "generic_fullstack",
+      "priority": 90,
+      "stack_type": "fullstack",
+      "backend_language": "python",
+      "frontend_language": "javascript",
+      "default_code_extension": ".py",
+      "keywords_any": ["fullstack", "全栈", "前后端"],
+      "guidance": "全栈项目通用模板。后端与前端均需分层，允许多语言配置文件。"
+    },
+    {
+      "id": "generic_frontend",
+      "priority": 80,
+      "stack_type": "frontend",
+      "backend_language": "python",
+      "frontend_language": "javascript",
+      "default_code_extension": ".js",
+      "keywords_any": ["frontend", "前端", "页面", "组件", "react", "vue", "angular", "ui"],
+      "guidance": "前端项目模板。请输出 pages/components/store(api) 等分层结构。"
+    },
+    {
+      "id": "default_backend_python",
+      "priority": 10,
+      "stack_type": "backend",
+      "backend_language": "python",
+      "frontend_language": "javascript",
+      "default_code_extension": ".py",
+      "keywords_any": [],
+      "guidance": "后端项目（主语言：python），请按后端分层输出。"
+    }
+  ]
+}

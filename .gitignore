@@ -1,0 +1,71 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.coverage
+.coverage.*
+htmlcov/
+.ipynb_checkpoints/
+
+# Dependency and packaging artifacts
+build/
+dist/
+site/
+*.egg-info/
+.eggs/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and editor settings
+.idea/
+.vscode/
+*.iml
+
+# OS junk files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Project-generated outputs
+experiment_results/
+experiment_kb/
+test_out_script/
+evaluate/results/
+knowledge_bases/chroma.sqlite3
+*.sqlite3
+*.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+
+# Java / mixed-language build outputs from generated samples
+**/target/
+**/out/
+**/bin/
+**/build/
+
+# 文档文件
+*.md
+*.txt
+
+#生成的coding文件
+**/coding/
+
+# evaluate文件夹下的所有文件
+evaluate/**/*

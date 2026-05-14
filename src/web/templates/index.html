@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoGen Dev Team 控制台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <main id="chatApp" class="chat-app pre-input">
+    <aside class="participants">
+      <h1>AutoGen Dev Team</h1>
+      <p class="subtitle">5方群聊</p>
+      <ul>
+        <li class="agent-item"><span class="dot coordinator"></span>Coordinator</li>
+        <li class="agent-item"><span class="dot pm"></span>Product Manager</li>
+        <li class="agent-item"><span class="dot engineer"></span>Engineer</li>
+        <li class="agent-item"><span class="dot qa"></span>QA Engineer</li>
+        <li class="user-item"><span class="dot user"></span>User（你）</li>
+      </ul>
+      <p id="status" class="status idle">状态：等待输入</p>
+    </aside>
+
+    <section class="chat-panel">
+      <header class="chat-header">多智能体群聊</header>
+      <div id="chatStream" class="chat-stream">
+        <p class="empty">发送任务后，这里会实时显示群聊内容。</p>
+      </div>
+
+      <form id="taskForm" class="composer">
+        <textarea id="taskInput" name="task" placeholder="输入你的任务描述，例如：帮我做一个带单元测试的待办事项CLI" required></textarea>
+        <div class="composer-actions">
+          <button id="submitBtn" type="submit">发送</button>
+        </div>
+      </form>
+
+      <section class="delivery">
+        <h2>交付结果</h2>
+        <pre id="resultBox">-</pre>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
