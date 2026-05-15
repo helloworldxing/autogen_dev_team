@@ -63,6 +63,9 @@ knowledge_bases/chroma.sqlite3
 # 文档文件
 *.md
 *.txt
+!README.md
+!readme.md
+!requirements.txt
 
 #生成的coding文件
 **/coding/
