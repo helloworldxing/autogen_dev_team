@@ -57,7 +57,7 @@ MONGO_COLLECTION=conversation_messages
 会从 `knowledge_bases/*_knowledge.txt` 加载角色知识，并写入本地 Chroma 持久化目录。
 
 ```bash
-python test_rag_system.py
+python tests/test_rag_system.py
 ```
 
 ### 4）命令行运行（推荐）
@@ -101,7 +101,7 @@ autogen-dev-team/
 │   └── web/                 # Web UI 静态资源与模板
 ├── knowledge_bases/         # 角色知识库（txt）+ Chroma 持久化目录
 ├── coding/                  # 每次任务的交付输出目录
-└── test_rag_system.py       # RAG 初始化与基本功能验证
+└── tests/                   # 测试用例
 ```
 
 
