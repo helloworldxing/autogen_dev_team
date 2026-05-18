@@ -39,11 +39,28 @@ DEFAULT_STACK_POLICY_RULES: Dict[str, Any] = {
         "java": [".java", ".kt"],
         "typescript": [".ts", ".js"],
     },
-    "frontend_extensions": [".ts", ".tsx", ".js", ".jsx", ".vue", ".css", ".scss", ".html"],
+    "frontend_extensions": [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".vue",
+        ".css",
+        ".scss",
+        ".html",
+    ],
     "language_aliases": {
-        "python": ["python", "py", "fastapi", "flask", "django"],
+        "python": ["python", "py", "fastapi", "django"],
         "java": ["java", "spring", "spring boot", "maven", "gradle", "mybatis", "jpa"],
-        "typescript": ["typescript", "ts", "node", "nestjs", "express", "next.js", "nextjs"],
+        "typescript": [
+            "typescript",
+            "ts",
+            "node",
+            "nestjs",
+            "express",
+            "next.js",
+            "nextjs",
+        ],
         "javascript": ["javascript", "js", "react", "vue", "angular"],
     },
     "profiles": [
@@ -55,7 +72,14 @@ DEFAULT_STACK_POLICY_RULES: Dict[str, Any] = {
             "frontend_language": "javascript",
             "default_code_extension": ".java",
             "keywords_all": ["java"],
-            "keywords_any": ["spring", "spring boot", "maven", "gradle", "mybatis", "jpa"],
+            "keywords_any": [
+                "spring",
+                "spring boot",
+                "maven",
+                "gradle",
+                "mybatis",
+                "jpa",
+            ],
             "guidance": "后端项目（Java/Spring/Maven 模板）。请输出 controller/service/entity/repository 分层，并包含 pom.xml 或 build.gradle。",
         },
         {
@@ -65,7 +89,7 @@ DEFAULT_STACK_POLICY_RULES: Dict[str, Any] = {
             "backend_language": "python",
             "frontend_language": "javascript",
             "default_code_extension": ".py",
-            "keywords_any": ["python", "fastapi", "flask", "django", "pytest"],
+            "keywords_any": ["python", "fastapi", "django", "pytest"],
             "guidance": "后端项目（Python/FastAPI 模板）。请输出 routers/services/models/repositories 分层，并包含 requirements 或 pyproject 配置。",
         },
         {
@@ -96,7 +120,16 @@ DEFAULT_STACK_POLICY_RULES: Dict[str, Any] = {
             "backend_language": "python",
             "frontend_language": "javascript",
             "default_code_extension": ".js",
-            "keywords_any": ["frontend", "前端", "页面", "组件", "react", "vue", "angular", "ui"],
+            "keywords_any": [
+                "frontend",
+                "前端",
+                "页面",
+                "组件",
+                "react",
+                "vue",
+                "angular",
+                "ui",
+            ],
             "guidance": "前端项目模板。请输出 pages/components/store(api) 等分层结构。",
         },
         {
@@ -134,7 +167,9 @@ def _load_rules() -> Dict[str, Any]:
     if configured:
         candidate = Path(configured)
     else:
-        candidate = Path(__file__).resolve().parents[1] / "config" / "stack_policy_rules.json"
+        candidate = (
+            Path(__file__).resolve().parents[1] / "config" / "stack_policy_rules.json"
+        )
 
     if candidate.is_file():
         try:
@@ -206,7 +241,9 @@ def infer_stack_policy(task: str) -> StackPolicy:
     stack_type = str(selected.get("stack_type", "backend")).lower()
     backend_lang = str(selected.get("backend_language", "python")).lower()
     frontend_lang = str(selected.get("frontend_language", "javascript")).lower()
-    default_ext = _normalize_ext(str(selected.get("default_code_extension", ".py"))).lower()
+    default_ext = _normalize_ext(
+        str(selected.get("default_code_extension", ".py"))
+    ).lower()
     guidance = str(selected.get("guidance", "请按分层结构输出项目。"))
 
     explicit_languages = _detect_explicit_languages(text, language_aliases)
@@ -223,9 +260,7 @@ def infer_stack_policy(task: str) -> StackPolicy:
         backend_lang = explicit_backend
         backend_defaults = sorted(backend_ext_map.get(backend_lang, {default_ext}))
         default_ext = backend_defaults[0] if backend_defaults else default_ext
-        guidance = (
-            f"{guidance}（检测到用户显式指定后端语言：{backend_lang}，已按用户指定强制覆盖默认语言）"
-        )
+        guidance = f"{guidance}（检测到用户显式指定后端语言：{backend_lang}，已按用户指定强制覆盖默认语言）"
 
     if "typescript" in explicit_languages:
         frontend_lang = "typescript"
@@ -235,7 +270,9 @@ def infer_stack_policy(task: str) -> StackPolicy:
     if stack_type == "frontend":
         allowed = common_ext | frontend_ext
     elif stack_type == "fullstack":
-        allowed = common_ext | frontend_ext | backend_ext_map.get(backend_lang, {default_ext})
+        allowed = (
+            common_ext | frontend_ext | backend_ext_map.get(backend_lang, {default_ext})
+        )
     else:
         allowed = common_ext | backend_ext_map.get(backend_lang, {default_ext})
         allowed.add(default_ext)

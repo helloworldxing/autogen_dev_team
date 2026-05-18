@@ -150,7 +150,7 @@ Do not collapse logic into single file.
 
     if knowledge_base:
         relevant_knowledge = knowledge_base.query_knowledge(
-            "python flask best practices code quality API development",
+            "python fastapi best practices code quality API development",
             n_results=3,
         )
         if relevant_knowledge:

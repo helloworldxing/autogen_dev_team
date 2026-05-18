@@ -22,7 +22,7 @@
   },
   "frontend_extensions": [".ts", ".tsx", ".js", ".jsx", ".vue", ".css", ".scss", ".html"],
   "language_aliases": {
-    "python": ["python", "py", "fastapi", "flask", "django"],
+    "python": ["python", "py", "fastapi", "django"],
     "java": ["java", "spring", "spring boot", "maven", "gradle", "mybatis", "jpa"],
     "typescript": ["typescript", "ts", "node", "nestjs", "express", "next.js", "nextjs"],
     "javascript": ["javascript", "js", "react", "vue", "angular"]
@@ -57,7 +57,7 @@
       "backend_language": "python",
       "frontend_language": "javascript",
       "default_code_extension": ".py",
-      "keywords_any": ["python", "fastapi", "flask", "django", "pytest"],
+      "keywords_any": ["python", "fastapi", "django", "pytest"],
       "guidance": "后端项目（Python/FastAPI 模板）。请输出 routers/services/models/repositories 分层，并包含 requirements 或 pyproject 配置。"
     },
     {

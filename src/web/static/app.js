@@ -9,6 +9,7 @@ const chatAppEl = document.getElementById("chatApp");
 let activeJobId = null;
 let cursor = 0;
 let pollTimer = null;
+let eventSource = null;
 
 function setStatus(text, type) {
   statusEl.textContent = `状态：${text}`;
@@ -82,6 +83,9 @@ function renderEvent(event) {
       side: "left",
       kind: "system",
     });
+    if (event.stage === "error") {
+      setResult(`错误：${event.message || "未知错误"}`);
+    }
     // 检测 complete 阶段
     if (event.stage === "complete") {
       appendBubble({
@@ -91,6 +95,11 @@ function renderEvent(event) {
         kind: "system",
       });
     }
+    return;
+  }
+
+  if (event.type === "result") {
+    setResult(JSON.stringify(event.result || {}, null, 2));
     return;
   }
 
@@ -120,55 +129,44 @@ function renderEvent(event) {
   }
 }
 
-async function pollEvents() {
+function startEventStream() {
   if (!activeJobId) {
     return;
   }
 
-  try {
-    const response = await fetch(`/api/events/${activeJobId}?cursor=${cursor}`);
-    const payload = await response.json();
+  if (eventSource) {
+    eventSource.close();
+  }
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${payload.error || "请求失败"}`);
-    }
-    
-    if (!payload.ok) {
-      throw new Error(payload.error || "获取事件失败");
-    }
+  eventSource = new EventSource(`/api/stream/${activeJobId}?cursor=${cursor}`);
 
-    for (const event of payload.events) {
+  eventSource.onmessage = (evt) => {
+    try {
+      const event = JSON.parse(evt.data);
       renderEvent(event);
-    }
-    cursor = payload.next_cursor;
 
-    if (payload.status === "success") {
-      setStatus("执行完成", "success");
-      setResult(JSON.stringify(payload.result, null, 2));
-      activeJobId = null;
+      if (event.type === "result") {
+        setStatus("执行完成", "success");
+        activeJobId = null;
+        eventSource.close();
+      }
+
+      if (event.type === "status" && event.stage === "error") {
+        setStatus("执行失败", "error");
+        activeJobId = null;
+        eventSource.close();
+      }
+    } catch (error) {
+      console.error("解析事件失败:", error);
+    }
+  };
+
+  eventSource.onerror = () => {
+    if (!activeJobId) {
       return;
     }
-
-    if (payload.status === "error") {
-      setStatus("执行失败", "error");
-      setResult(`错误：${payload.error || "未知错误"}`);
-      activeJobId = null;
-      return;
-    }
-  } catch (error) {
-    console.error("轮询错误:", error);
-    setStatus("轮询异常，正在重试...", "error");
-    setResult(`错误：${error.message}\n(系统将自动重试)`);
-    
-    if (activeJobId) {
-      pollTimer = window.setTimeout(pollEvents, 2000);
-    }
-    return;
-  }
-
-  if (activeJobId) {
-    pollTimer = window.setTimeout(pollEvents, 800);
-  }
+    setStatus("连接中断，正在重连...", "error");
+  };
 }
 
 taskForm.addEventListener("submit", async (event) => {
@@ -199,6 +197,11 @@ taskForm.addEventListener("submit", async (event) => {
     pollTimer = null;
   }
 
+  if (eventSource) {
+    eventSource.close();
+    eventSource = null;
+  }
+
   try {
     const response = await fetch("/api/run", {
       method: "POST",
@@ -209,12 +212,12 @@ taskForm.addEventListener("submit", async (event) => {
     const payload = await response.json();
 
     if (!response.ok || !payload.ok) {
-      throw new Error(payload.error || "执行失败");
+      throw new Error(payload.error || payload.detail || "执行失败");
     }
 
     activeJobId = payload.job_id;
     appendBubble({ sender: "System", text: `任务ID: ${activeJobId}`, side: "left", kind: "system" });
-    pollEvents();
+    startEventStream();
   } catch (error) {
     setStatus("执行失败", "error");
     setResult(`错误：${error.message}`);
